@@ -1,0 +1,13 @@
+{
+ "https://play.pokemonshowdown.com/data/pokedex.json": "OK (524,240 bytes)",
+ "https://play.pokemonshowdown.com/data/moves.json": "OK (261,001 bytes)",
+ "https://play.pokemonshowdown.com/data/learnsets.json": "OK (3,192,006 bytes)",
+ "https://play.pokemonshowdown.com/data/typechart.js": "OK (4,285 bytes)",
+ "https://play.pokemonshowdown.com/data/abilities.js": "OK (26,425 bytes)",
+ "https://play.pokemonshowdown.com/data/items.js": "OK (68,366 bytes)",
+ "https://play.pokemonshowdown.com/data/formats-data.js": "OK (71,053 bytes)",
+ "https://data.pkmn.cc/sets/gen9.json": "OK (1,118,973 bytes)",
+ "https://data.pkmn.cc/stats/gen9nationaldex.json": "OK (4,921,161 bytes)",
+ "https://data.pkmn.cc/stats/gen9ou.json": "OK (3,036,056 bytes)",
+ "https://gitlab.com/cable-mc/cobblemon.git (tag 1.8.4)": "OK (1025 species files, 492 item keys)"
+}
