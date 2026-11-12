@@ -24,6 +24,8 @@ def _check(data, s, settings):
         assert not (s.item and is_z_crystal(data, s.item))
     if not settings.tera:
         assert s.tera is None
+    elif s.item and (is_z_crystal(data, s.item) or is_mega_stone(data, s.item)):
+        assert s.tera is None, (s.name, s.item, s.tera)   # see test_tera_blocked_by_item
     else:
         assert s.tera in data.types
     if not settings.dynamax:
@@ -53,3 +55,27 @@ def test_levelup_only_sets(data, level):
         _check(data, s, st)
         for m in s.moves:
             assert set(data.learnsets[sid][m]) & {"L", "F"}
+
+
+def test_tera_blocked_by_item(data, all_on_candidates, all_on_settings):
+    """Pokemon Showdown, sim/battle-actions.ts:
+
+        canTerastallize(pokemon) {
+            if (pokemon.getItem().zMove || pokemon.canMegaEvo || this.dex.gen !== 9) return null;
+            return pokemon.teraType;
+        }
+
+    A Pokemon holding a Z-Crystal (item.zMove) or able to Mega Evolve (its own item.megaStone)
+    may not Terastallize, so no Tera type is suggested on those sets."""
+    assert all_on_settings.tera and all_on_settings.mega and all_on_settings.zmoves
+    megas = [s for s in all_on_candidates if s.item and is_mega_stone(data, s.item)]
+    zs = [s for s in all_on_candidates if s.item and is_z_crystal(data, s.item)]
+    assert megas, "fixture never produced a Mega Stone set"
+    assert zs, "fixture never produced a Z-Crystal set"
+    for s in megas + zs:
+        assert s.tera is None, (s.name, s.item, s.tera)
+    others = [s for s in all_on_candidates
+              if not (s.item and (is_mega_stone(data, s.item) or is_z_crystal(data, s.item)))]
+    assert others
+    for s in others:
+        assert s.tera in data.types, (s.name, s.item, s.tera)

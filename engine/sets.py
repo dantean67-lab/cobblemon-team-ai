@@ -421,8 +421,16 @@ def build_set(data: GameData, sid: str, settings: Settings, mega_id: str | None 
     nature = next((n for n in (st["nature"] if st else []) if n in NATURES), gen_nature)
     evs = smogon_evs or gen_evs
 
+    # Pokemon Showdown, sim/battle-actions.ts:
+    #     canTerastallize(pokemon) {
+    #         if (pokemon.getItem().zMove || pokemon.canMegaEvo || this.dex.gen !== 9) return null;
+    #         return pokemon.teraType;
+    #     }
+    # canMegaEvo (same file) is non-null only when the held item's `megaStone` maps this species,
+    # which is the only way this engine ever hands out a Mega Stone. So a Pokemon holding a
+    # Z-Crystal (item.zMove) or its own Mega Stone (item.megaStone) cannot Terastallize.
     tera = None
-    if settings.tera:
+    if settings.tera and not (item and (is_z_crystal(data, item) or is_mega_stone(data, item))):
         tera = next((t for t in (st["tera"] if st else []) if t in data.types), None) or \
             computed_tera(data, role, types, bs, moves, ability)
 

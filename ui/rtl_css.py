@@ -28,7 +28,15 @@ html, body, .stApp, .stMarkdown, [data-testid="stMarkdownContainer"], [data-test
 [data-testid="stSidebar"] textarea { direction: ltr; text-align: left; }
 .stTabs [data-baseweb="tab-list"] { direction: rtl; gap: 0.25rem; flex-wrap: wrap; }
 .stTabs [data-baseweb="tab"] { padding: 0.4rem 0.7rem; }
-.stRadio [role="radiogroup"], .stCheckbox, [data-testid="stToggle"] { direction: rtl; }
+/* Toggles / checkboxes: the Hebrew label stays RTL, but BaseWeb places the switch knob and the
+   checkbox mark with physical offsets, so the switch element itself must stay LTR. Under RTL the
+   knob sat on the right when OFF (so OFF looked ON) and the ON transform (translateX) pushed it
+   outside the track. ([data-testid="stToggle"] does not exist in Streamlit 1.67 — it is stCheckbox.) */
+.stRadio [role="radiogroup"], .stCheckbox, [data-testid="stCheckbox"] { direction: rtl; }
+[data-testid="stCheckbox"] label > div:not([data-testid="stWidgetLabel"]) { direction: ltr; }
+/* Same class of problem inside the RTL sidebar: keep physically ordered controls LTR. */
+[data-testid="stSidebar"] [data-testid="stNumberInputContainer"] { direction: ltr; }
+[data-testid="stSidebar"] [data-testid="stMultiSelectTagsContainer"] [data-tag] { direction: ltr; }
 .block-container { padding-top: 2.2rem; padding-left: 1rem; padding-right: 1rem; max-width: 1200px; }
 .app-subtitle { font-size: 1.15rem; opacity: 0.85; margin-top: -0.6rem; margin-bottom: 0.4rem; }
 [dir="ltr"] { unicode-bidi: isolate; }
